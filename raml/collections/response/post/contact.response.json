@@ -1,0 +1,10 @@
+{
+    "message": "SUCCESS",
+    "data": {
+        "idContact": 2,
+        "status": "CONTACT SAVE",
+        "idContactPersist": 2
+    },
+    "code": 2000,
+    "error": false
+}

@@ -1,0 +1,12 @@
+{
+  "metadata": {
+    "name"       : "Leopoldo",
+    "lastName"   : "Pancracio",
+    "phone"      : "951 963 852",
+    "schedule"   : "Todos los días",
+    "email"      : "leopo.pancra@yahoo.es",
+    "persist" : {
+    		"idProfile"  : 12
+    	}
+   }
+}

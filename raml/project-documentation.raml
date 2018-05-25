@@ -1,0 +1,91 @@
+#%RAML 1.0
+title: Project
+baseUri: https://services.urbania.pe/v2
+version: 1.0
+protocols: HTTPS
+mediaType: application/json
+types:
+    Project: !include types/project.raml
+
+/projects:
+    displayName: Project
+    post:
+        description:  Crea un proyecto
+        body:
+            application/json:
+                example: !include collections/request/post/project.request.json
+        responses:
+            200:
+                body:
+                    application/json:
+                        example: !include collections/response/post/project.response.json
+    /{id}:
+        uriParameters:
+            id:
+                type: integer
+                description: idProject a obtener o editar
+        get:
+            description: Muestra un proyecto
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: !include collections/response/get/project.response.json
+        put:
+            description: Actualiza un proyecto
+            body:
+                application/json:
+                    example: !include collections/request/post/project.request.json
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: !include collections/response/put/project.response.json
+
+        /contact:
+            post:
+                description: Crea  un contacto asociado a un proyecto
+                body:
+                    application/json:
+                        example: !include collections/request/post/contact.request.json
+                responses:
+                    200:
+                        body:
+                            application/json:
+                                example: !include collections/response/post/contact.response.json
+    /contact/{id}:
+        uriParameters:
+            id:
+                type: integer
+                description: idContacto si es para el método PUT o idProject para método GET
+        get:
+            description: Muestra el contacto asociado al proyecto
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: !include collections/response/get/contact.response.json
+        put:
+            description: Actualiza el contacto, tener en cuenta que se necesita el IDCONTACT
+            body:
+                application/json:
+                    example: !include collections/request/post/contact.request.json
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: !include collections/response/put/contact.response.json
+    /services:
+        get:
+            description: Muestra los servicios por tipo de Proyecto
+            queryParameters:
+                filter.propertyType.idPropertyType:
+                    description: Especifica el id de Tipo de Proyecto
+                    type: integer
+                    required: false
+                    example: 1
+                filter.service.idService:
+                    description: Especifica el id de Servicio
+                    type: integer
+                    required: false
+                    example: 3

@@ -1,0 +1,32 @@
+{
+    "error": false,
+    "code": 2000,
+    "message": "SUCCESS",
+    "data": [
+        {
+            "description": "Amplio y bonito",
+            "idUrbanization": 2,
+            "idStage": 1,
+            "floors": 15,
+            "name": "LAGUNAS DE LA LUNA",
+            "elevators": 2,
+            "state": 1,
+            "idProvince": 128,
+            "id": 1,
+            "idPropertyType": 3,
+            "units": 6,
+            "address": "La Concha Acústica de Lima",
+            "datePublication": "10/05/2018",
+            "idBeach": 2,
+            "idProfile": 15,
+            "idDepartment": 1,
+            "finished": "AÚN NO, FALTA POQUITO",
+            "garages": 2,
+            "towers": 4,
+            "idDistrict": 13,
+            "dateExpire": "09/06/2018",
+            "dateDelivery": "28/04/2018",
+            "reference": "CERQUITA A TU HOGAR"
+        }
+    ]
+}

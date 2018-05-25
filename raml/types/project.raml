@@ -1,0 +1,55 @@
+#%RAML 1.0 Library
+types:
+    Project:
+        properties:
+            idPropertyType:
+                required: true
+                type: number
+            idProfile:
+                required: true
+                type: number
+            idStage:
+                required: true
+                type: number
+            name:
+                required: true
+                type: string
+            idDepartment:
+                required: true
+                type: number
+            idProvince:
+                required: true
+                type: number
+            idDistrict:
+                required: true
+                type: number
+            idUrbanization:
+                required: false
+                type: number
+            idBeach:
+                required: false
+                type: number
+            reference:
+                required: false
+                type: string
+            address:
+                required: true
+                type: string
+            description:
+                required: true
+                type: string
+            finished:
+                required: true
+                type: string
+            towers:
+                required: false
+                type: number
+            floors:
+                required: false
+                type: number
+            elevators:
+                required: false
+                type: number
+            dateDelivery:
+                required: false
+                type: string
