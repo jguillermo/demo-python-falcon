@@ -1,9 +1,0 @@
-{
-    "message": "SUCCESS",
-    "data": {
-        "idContact": 2,
-        "status": "CONTACT UPDATED"
-    },
-    "code": 2000,
-    "error": false
-}

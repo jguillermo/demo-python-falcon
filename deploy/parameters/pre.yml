@@ -1,3 +1,0 @@
-environment:
-  ENV: "pre"
-  DEPLOY_REGION: "us-west-2"

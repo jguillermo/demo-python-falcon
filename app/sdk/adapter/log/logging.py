@@ -3,7 +3,7 @@ import logging
 
 
 class ConsoleLogger(object):
-    
+
     def __init__(self):
         try:
             self.output = logging

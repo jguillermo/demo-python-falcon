@@ -1,3 +1,3 @@
 #!/bin/bash
 
-nosetests --with-xunit -v /app/tests/suite_test.py
+nosetests --with-xunit -v /app/tests/unit/suite_test.py

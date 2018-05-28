@@ -1,41 +1,34 @@
-MicroService Project
+MicroService Base
 -----------------
 
-Commands:
+```
+git clone git@bitbucket.org:orbisunt/aptitus-microservice-base.git
+```
 
-~~~~
-$ make build
-$ make up
-~~~~
+1 cambiar el nombre al proyecto, make file line:5
+```
+SERVICE_NAME 	= base 
+```
+```
+SERVICE_NAME 	= otro_nombre 
+```
 
-Run migrations:
+iniciar el proyecto
+```
+make up
+```
 
-execute all migrations
+log
+```
+make log
+```
 
-~~~~
-$ make migrate local=true
-~~~~
+test unitarios
+```
+make tests
+```
 
-Create revisions:
-
-~~~~
-$ make revision DESC="add status column"
-~~~~
-
-Resource
-
-~~~~
-http://local.services.urbania.pe/v2/projects/
-~~~~
-
-UnitTest:
-
-~~~~
-$ make test_project
-~~~~
-
-for more command:
-
-~~~~
-$ make
-~~~~
+test e2e
+```
+make tests-e2e
+```

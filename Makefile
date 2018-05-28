@@ -2,36 +2,22 @@
 
 ## GENERAL ##
 OWNER 			= aptitus
-SERVICE_NAME 	= evaluations
-
+SERVICE_NAME 	= base
+PATH_PREFIX 	= "/v1"
 
 ## DEPLOY ##
-ENV 			?= lab
-BUILD_NUMBER 	?= 000006
-BUILD_TIMESTAMP ?= 20181004
-export DEPLOY_REGION 	?= ap-northeast-1
+ENV 			?= dev
+export DEPLOY_REGION 	?= eu-west-1
 ACCOUNT_ID		?= 929226109038
-DESIRED_COUNT 	?= 1
-MIN_SCALING		?= 1
-MAX_SCALING		?= 2
-HTTPS_PRIORITY 	?= 41
-MEMORY_SIZE 	?= 128
-CONTAINER_PORT 	?= 80
-INFRA_BUCKET 	?= infraestructura.dev
-SLACK_CHANNEL   ?= $(OWNER)-dev-changelog
+
 
 ## RESULT_VARS ##
-LOCAL_REGISTRY 	= local.$(OWNER).registry:5000
 PROJECT_NAME	= $(OWNER)-$(ENV)-$(SERVICE_NAME)
 export CONTAINER_NAME 	= $(PROJECT_NAME)_backend
-export IMAGE_DEV = $(PROJECT_NAME):dev
-IMAGE_CLI		= $(PROJECT_NAME):cli
-TAG_DEPLOY		= $(BUILD_TIMESTAMP).$(BUILD_NUMBER)
-IMAGE_DEPLOY	= $(PROJECT_NAME):$(TAG_DEPLOY)
-CLUSTER 		= $(OWNER)-dev
-DEPLOY_REGISTRY = $(ACCOUNT_ID).dkr.ecr.$(DEPLOY_REGION).amazonaws.com
-STACK_PATH		= $(INFRA_BUCKET)/build/cloudformation/$(OWNER)/$(ENV)/$(PROJECT_NAME)
+export IMAGE_DEV		= $(PROJECT_NAME):dev
+export IMAGE_TEST = $(ACCOUNT_ID).dkr.ecr.eu-west-1.amazonaws.com/aptitus-dev-testrestfull-test:20180622.33
 
+include cloudformation/Makefile
 
 ## Target Commons ##
 
@@ -40,28 +26,12 @@ build: ## build image to dev: make build
 	docker build -f docker/dev/Dockerfile -t $(IMAGE_DEV) docker/dev/
 	rm -f docker/dev/resources/requirements.txt
 
-## Target Dev ##
-
-pull: ## pull docker images from local registery: make pull
-	docker pull $(LOCAL_REGISTRY)/$(IMAGE_DEV)
-	docker tag $(LOCAL_REGISTRY)/$(IMAGE_DEV) $(IMAGE_DEV)
-	docker rmi $(LOCAL_REGISTRY)/$(IMAGE_DEV)
-	docker pull $(LOCAL_REGISTRY)/$(IMAGE_DEPLOY)
-	docker tag $(LOCAL_REGISTRY)/$(IMAGE_DEPLOY) $(IMAGE_DEPLOY)
-	docker rmi $(LOCAL_REGISTRY)/$(IMAGE_DEPLOY)
-
-push: ## push docker images to local registry: make push
-	docker tag $(IMAGE_DEV) $(LOCAL_REGISTRY)/$(IMAGE_DEV)
-	docker push $(LOCAL_REGISTRY)/$(IMAGE_DEV)
-	docker rmi $(LOCAL_REGISTRY)/$(IMAGE_DEV)
-	docker tag $(IMAGE_DEPLOY) $(LOCAL_REGISTRY)/$(IMAGE_DEPLOY)
-	docker push $(LOCAL_REGISTRY)/$(IMAGE_DEPLOY)
-	docker rmi $(LOCAL_REGISTRY)/$(IMAGE_DEPLOY)
-	docker images
-
 up: ## up docker containers: make up
 	docker-compose up -d
 	@make status
+
+start: ## up docker containers: make up
+	make up
 
 down: ## Stops and removes the docker containers: make down
 	docker-compose down
@@ -80,41 +50,35 @@ ssh: ## Connect to container for ssh protocol
 	docker exec -it $(CONTAINER_NAME) bash
 
 log: ## Show container logs
-	docker-compose logs -f
+	docker-compose logs -f backend
 
 install-lib: ## Connect to container for ssh protocol install with pip: make install-lib
 	docker exec -it $(CONTAINER_NAME) pip-3.5 install $(LIB)
 
 tests: ## Run the unitTests
-	@docker run --rm -t -v $(PWD)/app:/app:rw --entrypoint /resources/test.sh $(IMAGE_DEPLOY)
+	@docker run --rm -t -v $(PWD)/app:/app:rw --entrypoint /resources/test.sh $(IMAGE_DEV)
 	@sudo chown -R $(USER):$(USER) $(PWD)/app/*
+
+tests-e2e: ## Run the end to end Tests
+	docker-compose -f docker-compose.test.yml run --rm test
+
+login-aws-dev: ## Run the end to end Tests
+	aws ecr get-login --no-include-email --region eu-west-1 | sh
 
 ## Migrate ##
 migrate: ## Execute migrate
-	@if [ ! -z "${local}" ]; then \
-		if [ ${local} = "true" ]; then \
-			echo "execute local migrations"; \
-			docker run --rm -t -v $(PWD)/app:/app:rw \
-			--entrypoint /resources/alembic.sh $(IMAGE_DEPLOY) upgrade head; \
-		else \
-			echo "Please set the 'local' variable. e.g local=true" && exit 1; \
-		fi \
-	else \
-		docker run --rm -t -v $(PWD)/app:/app:rw \
-		--entrypoint /resources/alembic.sh $(IMAGE_DEPLOY) upgrade head; \
-	fi
+	docker run --rm -t -v $(PWD)/app:/app:rw --entrypoint /resources/alembic.sh $(IMAGE_DEV) upgrade head; \
 
 revision: ## Create a new revision
-	@docker run --rm -t -v $(PWD)/app:/app:rw -v $(PWD)/alembic:/alembic:rw --entrypoint /resources/alembic.sh $(IMAGE_DEPLOY) revision -m "$(DESC)"
+	@docker run --rm -t -v $(PWD)/app:/app:rw -v $(PWD)/alembic:/alembic:rw --entrypoint /resources/alembic.sh $(IMAGE_DEV) revision -m "$(DESC)"
 	@sudo chown -R $(USER) $(PWD)/app/alembic/versions
 
 downgrade: ## Execute migrate
 	@docker run --rm -t -v $(PWD)/app:/app:rw \
-			--entrypoint /resources/alembic.sh $(IMAGE_DEPLOY) downgrade base
+			--entrypoint /resources/alembic.sh $(IMAGE_DEV) downgrade base
 
 migrate-id: ## Execute migrate
 	@docker run --rm -t -v $(PWD)/alembic:/alembic:rw --entrypoint /resources/alembic.sh $(IMAGE_DEV) upgrade $(ID)
-
 
 ## Target Help ##
 

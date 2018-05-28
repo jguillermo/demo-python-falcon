@@ -1,4 +1,4 @@
-bind = 'unix:/tmp/gunicorn.sock'
+bind = ':80'
 workers = 1
 errorlog = '-'
 accesslog = '-'

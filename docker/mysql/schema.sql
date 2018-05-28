@@ -15,7 +15,7 @@ MySQL - 5.7.21 : Database - dbproject
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-USE `dbuser`;
+USE `db_project`;
 
 /*Table structure for table `user` */
 

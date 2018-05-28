@@ -1,21 +1,6 @@
-- prefix: '/v2/projects'
+- prefix: '/v1/evaluations'
 - routes:
-  - /: project.application.framework.handlers.project.ProjectCollectionHandler
-  - /{id}: project.application.framework.handlers.project.ProjectHandler
-  - /doc: project.application.framework.handlers.doc.ProjectDocumentationHandler
-  - /home: project.application.framework.handlers.home.HomeCollectionHandler
-  - /{id}/services: project.application.framework.handlers.service_project.ServiceProjectCollectionHandler
-  - /property-type: project.application.framework.handlers.property_type.PropertyTypeCollectionHandler
-  - /property-type/{id}: project.application.framework.handlers.property_type.PropertyTypeHandler
-  - /{id}/contact: project.application.framework.handlers.contact.ContactHandler
-  - /contact/{id}: project.application.framework.handlers.contact.ContactHandler
-  - /services: project.application.framework.handlers.service.ServiceCollectionHandler
-  - /bank: project.application.framework.handlers.bank.BankCollectionHandler
-  - /bank/{id}: project.application.framework.handlers.bank.BankHandler
-  - /stage: project.application.framework.handlers.stage.StageCollectionHandler
-  - /stage/{id}: project.application.framework.handlers.stage.StageHandler
-  - /multimedia: project.application.framework.handlers.multimedia.MultimediaCollectionHandler
-  - /multimedia/{id}: project.application.framework.handlers.multimedia.MultimediaHandler
-  - /{id}/multimedia: project.application.framework.handlers.multimedia_project.MultimediaProjectCollectionHandler
-  - /contact-persists/{id}: project.application.framework.handlers.contact_persists.ContactPersistsHandler
-  - /operation-type: project.application.framework.handlers.operation_type.OperationTypeCollectionHandler
+  - /doc: evaluation.application.framework.handlers.doc.ProjectDocumentationHandler
+  - /: evaluation.application.framework.handlers.user.UserHandler
+  - /{id}: evaluation.application.framework.handlers.user.UserIdHandler
+

@@ -1,5 +1,4 @@
-from evaluation.application.input.user_input import UserInput
-from sdk.types import TypeUuid, TypeString
+from sdk.types import TypeUuid, TypeString, TypeBase, TypeInteger
 
 
 class UserId(TypeUuid):
@@ -7,11 +6,22 @@ class UserId(TypeUuid):
 
 
 class UserName(TypeString):
-    pass
+    def validate(self):
+        super().validate()
+        if self._value.__len__() < 3:
+            raise Exception("El nombre debe ser mayor a 2 caracteres")
 
 
 class UserLastName(TypeString):
     pass
+
+
+class UserYear(TypeInteger):
+
+    def validate(self):
+        super().validate()
+        if self._value < 0:
+            raise Exception("la edad tiene que ser mayor que cero")
 
 
 class User:
@@ -23,15 +33,14 @@ class User:
 
 class UserFactory:
     @staticmethod
-    def create(input: UserInput) -> User:
-        id = UserId(input.id)
-        name = UserName(input.name)
-        last_name = UserLastName(input.last_name)
-        UserFactory._validate(id, name, last_name)
+    def create(id, name, last_name) -> User:
+        id = UserId(id)
+        name = UserName(name)
+        last_name = UserLastName(last_name)
+        UserFactory._validate([id, name, last_name])
         return User(id.value(), name.value(), last_name.value())
 
     @staticmethod
-    def _validate(**value_object):
-        for vo in value_object:
+    def _validate(value_object):
+        for vo in value_object:  # type: TypeBase
             vo.validate()
-

@@ -1,3 +1,0 @@
-environment:
-  ENV: "dev"
-  DEPLOY_REGION: "eu-west-1"
