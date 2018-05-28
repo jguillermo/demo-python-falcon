@@ -11,8 +11,7 @@ class FalconApi:
 
     def __init__(self):
         self.api = falcon.API(middleware=[
-            Basic(),
-            XRay()
+            Basic()
         ])
         self.__load_routes()
 

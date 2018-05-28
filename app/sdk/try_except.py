@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
-from evaluation.infrastructure.adapter.log.logging import ConsoleLogger
+
+from sdk.adapter.log.logging import ConsoleLogger
 
 
 def handler_except(method):
@@ -12,7 +13,7 @@ def handler_except(method):
         except Exception as e:
             logger = ConsoleLogger()
             logger.output.error('=== Handler exception ===')
-            logger.output.error(e)
+            logger.output.error(str(e), exc_info=True)
             logger.output.error('=' * 25)
             return e
     return method_wrapper

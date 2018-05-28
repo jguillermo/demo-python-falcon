@@ -19,7 +19,7 @@ class TypeString(TypeBase):
         self._value = value
 
     def validate(self):
-        if isinstance(self._value, str):
+        if not isinstance(self._value, str):
             raise Exception("El tipo de dato no es un string")
 
     def value(self) -> str:
@@ -27,6 +27,12 @@ class TypeString(TypeBase):
 
     def __str__(self) -> str:
         return self.value()
+
+    # @staticmethod
+    # def create(value):
+    #     string = self(value)
+    #     string.validate()
+    #     return string
 
 
 class TypeUuid(TypeString):

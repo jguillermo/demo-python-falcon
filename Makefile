@@ -32,6 +32,7 @@ CLUSTER 		= $(OWNER)-dev
 DEPLOY_REGISTRY = $(ACCOUNT_ID).dkr.ecr.$(DEPLOY_REGION).amazonaws.com
 STACK_PATH		= $(INFRA_BUCKET)/build/cloudformation/$(OWNER)/$(ENV)/$(PROJECT_NAME)
 
+export IMAGE_TEST = $(ACCOUNT_ID).dkr.ecr.eu-west-1.amazonaws.com/aptitus-dev-testrestfull-test
 
 ## Target Commons ##
 
@@ -86,8 +87,14 @@ install-lib: ## Connect to container for ssh protocol install with pip: make ins
 	docker exec -it $(CONTAINER_NAME) pip-3.5 install $(LIB)
 
 tests: ## Run the unitTests
-	@docker run --rm -t -v $(PWD)/app:/app:rw --entrypoint /resources/test.sh $(IMAGE_DEPLOY)
-	@sudo chown -R $(USER):$(USER) $(PWD)/app/*
+	docker run --rm -t -v $(PWD)/app:/app:rw --entrypoint /resources/test.sh $(IMAGE_DEV)
+	sudo chown -R $(USER):$(USER) $(PWD)/app/*
+
+tests-e2e: ## Run the end to end Tests
+	docker-compose -f docker-compose.test.yml run --rm test
+
+login-aws-test: ## Run the end to end Tests
+	aws ecr get-login --no-include-email --region eu-west-1 | sh
 
 ## Migrate ##
 migrate: ## Execute migrate

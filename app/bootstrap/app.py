@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from project.application.framework import FalconApi
-from project.infrastructure.repository.sqlalchemy.mapping import load_mapper
-from project.infrastructure.common.env import load_env_file
+from evaluation.application.framework import FalconApi
+from evaluation.infrastructure.repository.sqlalchemy.mapping import load_mapper
+from sdk.env import load_env_file
 
 
 class App:

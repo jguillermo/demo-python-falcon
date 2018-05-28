@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import requests
+
 from os import environ
 from sdk.adapter.config.base import BaseConfig
 
