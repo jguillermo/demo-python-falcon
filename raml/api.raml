@@ -1,0 +1,43 @@
+#%RAML 1.0
+title: Evaluations
+baseUri: https://services.aptitus.com/{version}/evaluations/
+version: v1
+protocols: HTTPS
+mediaType: application/json
+types:
+    Result: !include types/post_result_request.raml
+    Status: !include types/put_status_request.raml
+    Error: !include types/error.raml
+    Successful: !include types/successful.raml
+resourceTypes:
+    index: !include resourceTypes/index.raml
+    create: !include resourceTypes/create.raml
+    update: !include resourceTypes/update.raml
+traits:
+  hasRequestItem: !include traits/has_request_item.raml
+  hasResponseItem: !include traits/has_response_item.raml
+
+/result:
+    type: { create: { typeName: Result } }
+    post:
+        description: |
+            Store evaluation result
+        responses:
+            200:
+                body:
+                    type: Successful
+            500:
+                body:
+                    type: Error
+/status:
+    type: { update: { typeName: Status } }
+    put:
+        description: |
+            Store or Update evaluation progress
+        responses:
+            200:
+                body:
+                    type: Successful
+            500:
+                body:
+                    type: Error

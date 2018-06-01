@@ -1,0 +1,89 @@
+properties:
+  applicant_id:
+    type: integer
+    description: Applicant Indentifier
+  company_id:
+    type: integer
+    description: Company Identifier
+  job_id:
+    type: integer
+    description: Announcement Identifier
+  evaluation_ids:
+    type: array
+    description: Evaluation Identifier list
+  signature:
+    type: string
+  result:
+    type: string
+    description: Evaluation result
+example:
+  applicant_id: 124578451
+  company_id: 124512
+  job_id: 1245124515
+  evaluation_ids: [1, 2, 3]
+  signature: a6c44d7e4985b82303f1ce396e3bdb38
+  result: [
+   {
+      "id":1,
+      "resultado":3,
+      "competencias":{
+         "Competencias 1":{
+            "id":1,
+            "resultado":3
+         },
+         "Competencias 2":{
+            "id":2,
+            "resultado":2
+         },
+         "Competencias 3":{
+            "id":3,
+            "resultado":3
+         },
+
+      },
+      "pruebas":[
+         {
+            "id":1,
+            "resultado":3,
+            "compentencias":{
+               "Competencia 1":{
+                  "id":1,
+                  "resultado":3
+               },
+               "Competencia 2":{
+                  "id":2,
+                  "resultado":3
+               }
+            }
+         },
+         {
+            "id":2,
+            "resultado":2,
+            "compentencias":{
+               "Competencia 2":{
+                  "id":2,
+                  "resultado":2
+               },
+               "Competencia 3":{
+                  "id":3,
+                  "resultado":3
+               }
+            }
+         },
+         {
+            "id":3,
+            "resultado":3,
+            "compentencias":{
+               "Competencia 1":{
+                  "id":1,
+                  "resultado":3
+               },
+               "Competencia 3":{
+                  "id":3,
+                  "resultado":3
+               }
+            }
+         }
+      ]
+   }
+]

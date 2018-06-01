@@ -1,0 +1,22 @@
+properties:
+  applicant_id:
+    type: integer
+    description: Applicant Indentifier
+  company_id:
+    type: integer
+    description: Company Identifier
+  job_id:
+    type: integer
+    description: Announcement Identifier
+  evaluation_ids:
+    type: array
+    description: Evaluation Identifier list
+  progress:
+    type: number[]
+    description: Progress percentage
+example:
+  applicant_id: 124578451
+  company_id: 124512
+  job_id: 1245124515
+  evaluation_ids: [1, 2, 3]
+  progress: [50, 33, 21]
