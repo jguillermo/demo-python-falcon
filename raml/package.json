@@ -1,0 +1,48 @@
+{
+  "name": "ramelix",
+  "version": "1.0.0",
+  "description": "RAML configuration for payment REST ",
+  "main": "./bin/www",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "start": "node ./bin/www",
+    "lint": "xo ./routes/*.js ./bin/www",
+    "html": "raml2html ./api.raml > ./index.html",
+    "jscomplex": "jscomplex \"['./routes/*.js']\"",
+    "predoc": "npm run html",
+    "doc": "serve ./ -p 8001",
+    "server": "node raml-server.js ./payment/",
+    "build": "npm run predoc && cp index.html ../../app/Resources/views/Apidoc.html.php"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "raml",
+    "express",
+    "osprey",
+    "node"
+  ],
+  "author": "jansanchez",
+  "license": "MIT",
+  "homepage": "",
+  "dependencies": {
+    "express": "^4.13.4",
+    "raml2html": "6.4.1"
+  },
+  "xo": {
+    "esnext": true,
+    "rules": {
+      "babel/new-cap": 0
+    }
+  },
+  "devDependencies": {
+    "jscomplex": "^1.0.2",
+    "serve": "^1.4.0",
+    "watch": "^0.17.1",
+    "xo": "^0.14.0"
+  }
+}

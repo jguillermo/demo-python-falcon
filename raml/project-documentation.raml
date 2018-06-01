@@ -1,16 +1,16 @@
 #%RAML 1.0
-title: Project
-baseUri: https://services.urbania.pe/v2
+title: API Evaluations
+baseUri: https://services.aptitus.com/{version}/
 version: 1.0
 protocols: HTTPS
 mediaType: application/json
 types:
     Project: !include types/project.raml
 
-/projects:
-    displayName: Project
+/evaluations:
+    displayName: New Evaluation
     post:
-        description:  Crea un proyecto
+        description:  Crea una evaluación
         body:
             application/json:
                 example: !include collections/request/post/project.request.json
