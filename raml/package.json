@@ -1,7 +1,7 @@
 {
   "name": "ramelix",
   "version": "1.0.0",
-  "description": "RAML configuration for payment REST ",
+  "description": "RAML Configuration for Evaluations REST ",
   "main": "./bin/www",
   "directories": {
     "example": "examples"
@@ -13,8 +13,8 @@
     "jscomplex": "jscomplex \"['./routes/*.js']\"",
     "predoc": "npm run html",
     "doc": "serve ./ -p 8001",
-    "server": "node raml-server.js ./payment/",
-    "build": "npm run predoc && cp index.html ../../app/Resources/views/Apidoc.html.php"
+    "server": "node raml-server.js ./evaluations/",
+    "build": "npm run predoc && cp index.html ../app/doc/index.html"
   },
   "repository": {
     "type": "git",

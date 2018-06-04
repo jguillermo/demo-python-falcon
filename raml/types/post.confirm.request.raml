@@ -11,12 +11,13 @@ properties:
   evaluation_ids:
     type: array
     description: Evaluation Identifier list
-  progress:
-    type: number[]
-    description: Progress percentage
+  signature:
+    type: string
+    description: The formule is... md5( CONCAT((CONCAT(company_id, job_id) + applicant_id), evaluation_ids) )...
+      evaluation_ids is ordered of way alphabetic
 example:
   applicant_id: 124578451
   company_id: 124512
   job_id: 1245124515
-  evaluation_ids: [1, 2, 3]
-  progress: [50, 33, 21]
+  evaluation_ids: ['CON', 'COM', 'ING']
+  signature: a6c44d7e4985b82303f1ce396e3bdb38

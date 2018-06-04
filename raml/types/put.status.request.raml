@@ -1,0 +1,26 @@
+properties:
+  applicant_id:
+    type: integer
+    description: Applicant Indentifier
+  company_id:
+    type: integer
+    description: Company Identifier
+  job_id:
+    type: integer
+    description: Announcement Identifier
+  evaluation_id:
+    type: string
+    description: Evaluation Identifier
+  signature:
+    type: string
+    description: The formule is... md5( CONCAT((CONCAT(company_id, job_id) + applicant_id), evaluation_id) )
+  progress:
+    type: number
+    multipleOf: 0.01
+    description: Progress percentage
+example:
+  applicant_id: 124578451
+  company_id: 124512
+  job_id: 1245124515
+  evaluation_id: ING
+  progress: 50

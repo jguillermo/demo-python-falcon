@@ -5,39 +5,72 @@ version: v1
 protocols: HTTPS
 mediaType: application/json
 types:
-    Result: !include types/post_result_request.raml
-    Status: !include types/put_status_request.raml
-    Error: !include types/error.raml
-    Successful: !include types/successful.raml
+  Result: !include types/post.result.request.raml
+  Status: !include types/put.status.request.raml
+  Confirm: !include types/post.confirm.request.raml
+  ConfirmResponse: !include types/post.confirm.200.response.raml
+  ConfirmResponseError: !include types/post.confirm.400.response.raml
+  Process: !include types/post.process.request.raml
+  ProcessResponse: !include types/post.process.response.raml
+  Error: !include types/error.raml
+  Successful: !include types/successful.raml
 resourceTypes:
-    index: !include resourceTypes/index.raml
-    create: !include resourceTypes/create.raml
-    update: !include resourceTypes/update.raml
+  index: !include resourceTypes/index.raml
+  create: !include resourceTypes/create.raml
+  update: !include resourceTypes/update.raml
 traits:
-  hasRequestItem: !include traits/has_request_item.raml
-  hasResponseItem: !include traits/has_response_item.raml
+  hasRequestItem: !include traits/has.request.item.raml
+  hasResponseItem: !include traits/has.response.item.raml
 
-/result:
+
+/process:
+  type: { create: { typeName: Process } }
+  post:
+    description: |
+      Create evaluation process in application
+    responses:
+      201:
+        body:
+          type: ProcessResponse
+      500:
+        body:
+          type: Error
+  /confirm:
+    type: { create: { typeName: Confirm } }
+    post:
+      description: |
+        Send data for confirm validation
+      responses:
+        200:
+          body:
+            type: ConfirmResponse
+        400:
+          body:
+            type: ConfirmResponseError
+        500:
+          body:
+            type: Error
+  /result:
     type: { create: { typeName: Result } }
     post:
-        description: |
-            Store evaluation result
-        responses:
-            200:
-                body:
-                    type: Successful
-            500:
-                body:
-                    type: Error
-/status:
+      description: |
+        Store evaluation result
+      responses:
+        201:
+          body:
+            type: Successful
+        500:
+          body:
+            type: Error
+  /status:
     type: { update: { typeName: Status } }
     put:
-        description: |
-            Store or Update evaluation progress
-        responses:
-            200:
-                body:
-                    type: Successful
-            500:
-                body:
-                    type: Error
+      description: |
+        Store or Update evaluation progress
+      responses:
+        200:
+          body:
+            type: Successful
+        500:
+          body:
+            type: Error
