@@ -1,4 +1,4 @@
-- prefix: '/v1/users'
+- prefix: '/v1/evaluations'
 - routes:
   - /doc: evaluation.application.framework.handlers.doc.ProjectDocumentationHandler
   - /: evaluation.application.framework.handlers.user.UserHandler

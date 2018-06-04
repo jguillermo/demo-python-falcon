@@ -21,7 +21,7 @@ pipeline {
       description: "Region de despliegue de aws")
     choice(
       name: 'SLACK_CHANNEL',
-      choices:"urbania-dev-changelog\nurbania-pre-changelog\nurbania-changelog",
+      choices:"aptitus-dev-changelog\naptitus-pre-changelog\naptitus-changelog",
       description: "Canal de slack para notificar sobre el despliegue")
     choice(
       name: 'INFRA_BUCKET',
@@ -37,7 +37,7 @@ pipeline {
       description: "Numero ne instancias por incremento")
     text(name: 'MIN_SCALING',     defaultValue: '1',  description: 'Minimo de contenedores disponibles')
     text(name: 'MAX_SCALING',     defaultValue: '2',  description: 'Maximo de contenedores disponibles')
-    text(name: 'HTTPS_PRIORITY',  defaultValue: '43', description: 'Prioridad de listener Https en el ALB: dev=43')
+    text(name: 'HTTPS_PRIORITY',  defaultValue: '35', description: 'Prioridad de listener Https en el ALB: dev=35')
   }
   stages {
     stage('Checkout') {
@@ -67,11 +67,6 @@ pipeline {
             sh 'make create-registry'
           }
         }
-      }
-    }
-    stage('Sync S3 Config') {
-      steps {
-        sh 'make sync-config'
       }
     }
     stage('Install') {
