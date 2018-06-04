@@ -1,18 +1,18 @@
 Description: >
-  Urbania scheduled tasks service.
+  Aptitus scheduled tasks service.
 
 Mappings:
   RegionMap:
     eu-west-1:
-      HttpsListener: "/app/ALB-VP1-DEV-URB/98f4c42d1956826f/c2a540b855e9e60d"
+      HttpsListener: "/app/ALB-VP1-DEV-APT/73378c56a138d979/7e6e8ceb087cd1b3"
       VpcId: vpc-d2da45b6
       EnvRegion: "dev"
     us-west-2:
-      HttpsListener: "/app/ALB-VP3-PRE-URB/d11f82cdf81b5099/5eca3ba21a834b53"
+      HttpsListener: "/app/ALB-VP3-PRE-APT/967d4f98fd9e077e/fe2d1c8d1f843ad3"
       VpcId: vpc-5cf97639
       EnvRegion: "pre"
     us-east-1:
-      HttpsListener:  "/app/ALB-VP4-PROD-URB/31deebd560e699d0/59ba72d619c86938"
+      HttpsListener:  "/app/ALB-VP4-PROD-APT/cf381bfa70a3dbb8/ffaabbc0312025bd"
       VpcId: vpc-5d704e38
       EnvRegion: "prod"
 
@@ -44,7 +44,7 @@ Parameters:
   Domain:
     Description: Host
     Type: String
-    Default: services.urbania.pe
+    Default: services.aptitus.com
 
   ServiceName:
     Description: Nombre del servicio
