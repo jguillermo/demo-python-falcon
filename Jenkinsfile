@@ -47,20 +47,27 @@ pipeline {
     }
     stage('Set Enviroment') {
       steps {
-        sh '''
-          export ENV=$ENV
-          export DEPLOY_REGION=$DEPLOY_REGION
-          export DESIRED_COUNT=$DESIRED_COUNT
-          export MIN_SCALING=$MIN_SCALING
-          export MAX_SCALING=$MAX_SCALING
-          export HTTPS_PRIORITY=$HTTPS_PRIORITY
-          export MEMORY_SIZE=$MEMORY_SIZE
-          export INFRA_BUCKET=$INFRA_BUCKET
-          export SLACK_CHANNEL=$SLACK_CHANNEL
-          '''
+        script {
+          
+          if (fileExists("./deploy/parameters/${GIT_BRANCH}.yml")) {
+            def configFile = readYaml file: "./deploy/parameters/${GIT_BRANCH}.yml"
+            println "config ==> ${configFile}"
+            for (var in configFile.environment) {
+              env[var.key] = var.value
+            }
+            env[ENV] = ${GIT_BRANCH}
+            echo "${ENV}"
+            echo "${DEPLOY_REGION}"
+          }
+          else {
+            error("No existe la configuracion para la rama ${GIT_BRANCH}")
+          }
+        }
+        
+        
       }
     }
-    stage('ECR') {
+    stage('Create Registry') {
       steps {
         script {
           if ("${params.REGISTRY}" == "true") {
@@ -72,6 +79,11 @@ pipeline {
     stage('Install') {
       steps {
         sh 'make install'
+      }
+    }
+    stage('Test') {
+      steps {
+        sh 'make tests'
       }
     }
     stage('Sync CloudFormation Resources') {
@@ -87,11 +99,6 @@ pipeline {
     stage('Publish') {
       steps {
         sh 'make publish'
-      }
-    }
-    stage('Test') {
-      steps {
-        sh 'make tests'
       }
     }
     stage('DB Migrations') {
