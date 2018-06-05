@@ -55,7 +55,6 @@ pipeline {
             for (var in configFile.environment) {
               env[var.key] = var.value
             }
-            env["ENV"] = ${GIT_BRANCH}
             echo "${ENV}"
             echo "${DEPLOY_REGION}"
           }

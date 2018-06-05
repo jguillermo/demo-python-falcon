@@ -1,4 +1,5 @@
 environment:
+  ENV: dev                                   #Ambiente de despliegue
   DEPLOY_REGION: eu-west-1                   #Region de despliegue de aws
   SLACK_CHANNEL: aptitus-dev-changelog       #Canal de slack para notificar sobre el despliegue
   INFRA_BUCKET: infraestructura.dev          #Bucker de recursos para el despliegue
