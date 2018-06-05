@@ -5,18 +5,6 @@ OWNER 			= aptitus
 SERVICE_NAME 	= evaluations
 PATH_PREFIX 	= "/v1"
 
-## VARIABLES FOR LOCAL BALANCER, 'SPRING CONFIG OR ENV VARS' ##
-VIRTUAL_HOST		= $(PATH_PREFIX)/projects*
-DB_HOST				= mysql57
-DB_NAME				= db_project_microservice
-DB_USER				= root
-DB_PASS				= 1234
-DB_PORT				= 3307
-
-## DEV ##
-TAG_DEV			= dev
-TAG_CLI 		= cli
-
 ## DEPLOY ##
 ENV 			?= dev
 BUILD_NUMBER 	?= 000008
@@ -33,18 +21,12 @@ INFRA_BUCKET 	?= infraestructura.dev
 SLACK_CHANNEL   ?= aptitus-dev-changelog
 
 ## RESULT_VARS ##
-LOCAL_REGISTRY 	= local.$(OWNER).registry:5000
-DOCKER_NETWORK 	= $(OWNER)_network
 PROJECT_NAME	= $(OWNER)-$(ENV)-$(SERVICE_NAME)
 export CONTAINER_NAME 	= $(PROJECT_NAME)_backend
-export IMAGE_DEV		= $(PROJECT_NAME):$(TAG_DEV)
-IMAGE_CLI		= $(PROJECT_NAME):$(TAG_CLI)
-TAG_DEPLOY		= $(BUILD_TIMESTAMP).$(BUILD_NUMBER)
-IMAGE_DEPLOY	= $(PROJECT_NAME):$(TAG_DEPLOY)
-CLUSTER 		= $(OWNER)-dev
+export IMAGE_DEV		= $(PROJECT_NAME):dev
+IMAGE_DEPLOY	= $(PROJECT_NAME):$(BUILD_TIMESTAMP).$(BUILD_NUMBER)
 DEPLOY_REGISTRY = $(ACCOUNT_ID).dkr.ecr.$(DEPLOY_REGION).amazonaws.com
 STACK_PATH		= $(INFRA_BUCKET)/build/cloudformation/$(OWNER)/$(ENV)/$(PROJECT_NAME)
-
 
 ## Target Commons ##
 
@@ -88,29 +70,18 @@ tests-e2e: ## Run the end to end Tests
 
 ## Migrate ##
 migrate: ## Execute migrate
-	@if [ ! -z "${local}" ]; then \
-		if [ ${local} = "true" ]; then \
-			echo "execute local migrations"; \
-			docker run --rm -t -v $(PWD)/app:/app:rw --network $(DOCKER_NETWORK) \
-			--entrypoint /resources/alembic.sh $(IMAGE_DEPLOY) upgrade head; \
-		else \
-			echo "Please set the 'local' variable. e.g local=true" && exit 1; \
-		fi \
-	else \
-		docker run --rm -t -v $(PWD)/app:/app:rw \
-		--entrypoint /resources/alembic.sh $(IMAGE_DEPLOY) upgrade head; \
-	fi
+	docker run --rm -t -v $(PWD)/app:/app:rw --entrypoint /resources/alembic.sh $(IMAGE_DEV) upgrade head; \
 
 revision: ## Create a new revision
-	@docker run --rm -t -v $(PWD)/app:/app:rw -v $(PWD)/alembic:/alembic:rw --network $(DOCKER_NETWORK) --entrypoint /resources/alembic.sh $(IMAGE_DEPLOY) revision -m "$(DESC)"
+	@docker run --rm -t -v $(PWD)/app:/app:rw -v $(PWD)/alembic:/alembic:rw --entrypoint /resources/alembic.sh $(IMAGE_DEV) revision -m "$(DESC)"
 	@sudo chown -R $(USER) $(PWD)/app/alembic/versions
 
 downgrade: ## Execute migrate
-	@docker run --rm -t -v $(PWD)/app:/app:rw --network $(DOCKER_NETWORK) \
-			--entrypoint /resources/alembic.sh $(IMAGE_DEPLOY) downgrade base
+	@docker run --rm -t -v $(PWD)/app:/app:rw \
+			--entrypoint /resources/alembic.sh $(IMAGE_DEV) downgrade base
 
 migrate-id: ## Execute migrate
-	@docker run --rm -t -v $(PWD)/alembic:/alembic:rw --network $(DOCKER_NETWORK) --entrypoint /resources/alembic.sh $(IMAGE_DEV) upgrade $(ID)
+	@docker run --rm -t -v $(PWD)/alembic:/alembic:rw --entrypoint /resources/alembic.sh $(IMAGE_DEV) upgrade $(ID)
 
 ## Deploy ##
 
@@ -176,6 +147,7 @@ slack-notify: ## Send slack notify
 	curl -X POST \
 	--data-urlencode 'payload={"channel":"$(SLACK_CHANNEL)","username":"Jenkins", "icon_url":"https://wiki.jenkins.io/download/attachments/2916393/logo.png", "attachments":[{"color":"good","title":"$(SLACK_TITLE)", "title_link":"$(SLACK_LINK)", "text":"$(SLACK_TEXT)"}]}' \
 	https://hooks.slack.com/services/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
+
 
 ## Target Help ##
 

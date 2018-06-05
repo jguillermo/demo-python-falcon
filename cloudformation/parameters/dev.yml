@@ -1,3 +1,9 @@
 environment:
-  ENV: "dev"
-  DEPLOY_REGION: "eu-west-1"
+  DEPLOY_REGION: eu-west-1                   #Region de despliegue de aws
+  SLACK_CHANNEL: aptitus-dev-changelog       #Canal de slack para notificar sobre el despliegue
+  INFRA_BUCKET: infraestructura.dev          #Bucker de recursos para el despliegue
+  MEMORY_SIZE: 128                           #Cantidad de memoria asignada al contenedor
+  DESIRED_COUNT: 1                           #Numero ne instancias por incremento
+  MIN_SCALING: 1                             #Minimo de contenedores disponibles
+  MAX_SCALING: 2                             #Maximo de contenedores disponibles
+  HTTPS_PRIORITY: 35                         #Prioridad de listener Https en el ALB: dev=35
