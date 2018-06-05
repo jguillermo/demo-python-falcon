@@ -48,9 +48,9 @@ pipeline {
     stage('Set Enviroment') {
       steps {
         script {
-          
-          if (fileExists("./deploy/parameters/${GIT_BRANCH}.yml")) {
-            def configFile = readYaml file: "./deploy/parameters/${GIT_BRANCH}.yml"
+
+          if (fileExists("./cloudformation/parameters/${GIT_BRANCH}.yml")) {
+            def configFile = readYaml file: "./cloudformation/parameters/${GIT_BRANCH}.yml"
             println "config ==> ${configFile}"
             for (var in configFile.environment) {
               env[var.key] = var.value
@@ -63,8 +63,8 @@ pipeline {
             error("No existe la configuracion para la rama ${GIT_BRANCH}")
           }
         }
-        
-        
+
+
       }
     }
     stage('Create Registry') {
