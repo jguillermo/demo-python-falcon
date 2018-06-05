@@ -1,3 +1,23 @@
+## GENERAL ##
+
+
+## DEPLOY ##
+BUILD_NUMBER 	?= 000008
+BUILD_TIMESTAMP ?= 20181004
+DESIRED_COUNT 	?= 1
+MIN_SCALING		?= 1
+MAX_SCALING		?= 2
+HTTPS_PRIORITY 	?= 35
+MEMORY_SIZE 	?= 128
+CONTAINER_PORT 	?= 80
+INFRA_BUCKET 	?= infraestructura.dev
+SLACK_CHANNEL   ?= aptitus-dev-changelog
+
+## RESULT_VARS ##
+IMAGE_DEPLOY	= $(PROJECT_NAME):$(BUILD_TIMESTAMP).$(BUILD_NUMBER)
+DEPLOY_REGISTRY = $(ACCOUNT_ID).dkr.ecr.$(DEPLOY_REGION).amazonaws.com
+STACK_PATH		= $(INFRA_BUCKET)/build/cloudformation/$(OWNER)/$(ENV)/$(PROJECT_NAME)
+
 ## Deploy ##
 
 sync-cloudformation: ## Sync additional cloudformation resources in S3: make sync-cloudformation

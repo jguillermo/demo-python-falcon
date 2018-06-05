@@ -1,7 +1,7 @@
 // ============================
 //  HOST
 // ============================
-process.env.HOST = 'http://backend:80/v1/users';
+process.env.HOST = 'http://backend:80/v1/evaluations';
 
 
 // ============================
