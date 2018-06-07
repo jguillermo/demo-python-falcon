@@ -1,4 +1,4 @@
-from sdk.types import TypeUuid, TypeString
+from sdk.types import TypeUuid, TypeString, TypeBase
 
 
 class UserId(TypeUuid):
@@ -35,5 +35,5 @@ class UserFactory:
 
     @staticmethod
     def _validate(value_object):
-        for vo in value_object:
+        for vo in value_object:  # type: TypeBase
             vo.validate()

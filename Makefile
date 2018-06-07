@@ -15,7 +15,7 @@ ACCOUNT_ID		?= 929226109038
 PROJECT_NAME	= $(OWNER)-$(ENV)-$(SERVICE_NAME)
 export CONTAINER_NAME 	= $(PROJECT_NAME)_backend
 export IMAGE_DEV		= $(PROJECT_NAME):dev
-export IMAGE_TEST = $(ACCOUNT_ID).dkr.ecr.$(DEPLOY_REGION).amazonaws.com/aptitus-dev-testrestfull-test
+export IMAGE_TEST = $(ACCOUNT_ID).dkr.ecr.eu-west-1.amazonaws.com/aptitus-dev-testrestfull-test
 
 include cloudformation/Makefile
 
@@ -29,6 +29,9 @@ build: ## build image to dev: make build
 up: ## up docker containers: make up
 	docker-compose up -d
 	@make status
+
+start: ## up docker containers: make up
+	make up
 
 down: ## Stops and removes the docker containers: make down
 	docker-compose down
