@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import falcon
 
-from bootstrap.container import AppServicesInjector
-from evaluation.application.command.user_command_query import CreateUserCommand, UpdateUserCommand, FindUserQuery
+from bootstrap.container import AppServicesInjector, HandlerInjector
+from evaluation.application.cqrs.user_command_query import CreateUserCommand, UpdateUserCommand, FindUserQuery
 from sdk.adapter.log.logging import ConsoleLogger
 from sdk.adapter.response.orbis import Response
 from sdk.types import TypeUuid
@@ -14,11 +14,11 @@ class UserHandler:
     def on_post(self, req: falcon.Request, resp: falcon.Response):
         try:
             id = TypeUuid.random().value()
-            user_create_command = CreateUserCommand(
+            command = CreateUserCommand(
                 id=id,
                 name=req.media.get('name', ''),
                 last_name=req.media.get('last_name', ''))
-            AppServicesInjector.user_create().create(user_create_command)
+            HandlerInjector.CreateUserCommand().handle(command)
             resp.media = self.response.success({'id': id})
             resp.status = falcon.HTTP_201
         except Exception as e:
@@ -36,8 +36,8 @@ class UserIdHandler:
     def on_get(self, req: falcon.Request, resp: falcon.Response, id):
         try:
 
-            find_user_query = FindUserQuery(id)
-            resp.media = self.response.success(AppServicesInjector.user_finder().find_by_id(find_user_query))
+            query = FindUserQuery(id)
+            resp.media = self.response.success(HandlerInjector.FindUserQuery().handle(query))
             resp.status = falcon.HTTP_200
         except Exception as e:
             print(e.__str__())
@@ -46,12 +46,12 @@ class UserIdHandler:
 
     def on_put(self, req: falcon.Request, resp: falcon.Response, id):
         try:
-            user_update_command = UpdateUserCommand(
+            command = UpdateUserCommand(
                 id=id,
                 name=req.media.get('name', ''),
                 last_name=req.media.get('last_name', ''))
 
-            AppServicesInjector.user_update().update(user_update_command)
+            HandlerInjector.UpdateUserCommand().handle(command)
             resp.media = self.response.success('ok')
             resp.status = falcon.HTTP_200
         except Exception as e:
