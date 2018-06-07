@@ -22,12 +22,11 @@ traits:
   hasRequestItem: !include traits/has.request.item.raml
   hasResponseItem: !include traits/has.response.item.raml
 
-
-/process:
+/processes:
   type: { create: { typeName: Process } }
   post:
     description: |
-      Create evaluation process in application
+      Create evaluation process in application job
     responses:
       201:
         body:
@@ -35,42 +34,52 @@ traits:
       500:
         body:
           type: Error
-  /confirm:
-    type: { create: { typeName: Confirm } }
-    post:
-      description: |
-        Send data for confirm validation
-      responses:
-        200:
-          body:
-            type: ConfirmResponse
-        400:
-          body:
-            type: ConfirmResponseError
-        500:
-          body:
-            type: Error
-  /result:
-    type: { create: { typeName: Result } }
-    post:
-      description: |
-        Store evaluation result
-      responses:
-        201:
-          body:
-            type: Successful
-        500:
-          body:
-            type: Error
-  /status:
-    type: { update: { typeName: Status } }
-    put:
-      description: |
-        Store or Update evaluation progress
-      responses:
-        200:
-          body:
-            type: Successful
-        500:
-          body:
-            type: Error
+  /{process_id}:
+    uriParameters:
+      process_id:
+        type: integer
+        description: Evaluation Process ID
+    /confirm:
+      type: { create: { typeName: Confirm } }
+      post:
+        description: |
+          Send data for confirm validation
+        responses:
+          200:
+            body:
+              type: ConfirmResponse
+          400:
+            body:
+              type: ConfirmResponseError
+          500:
+            body:
+              type: Error
+    /result:
+      type: { create: { typeName: Result } }
+      post:
+        description: |
+          Store evaluation result
+        responses:
+          201:
+            body:
+              type: Successful
+          500:
+            body:
+              type: Error
+    /evaluations/{evaluation_id}:
+      uriParameters:
+        evaluation_id:
+          type: integer
+          description: Evaluation ID
+      /progress:
+        type: { update: { typeName: Status } }
+        put:
+          description: |
+            Store or Update evaluation progress
+          responses:
+            200:
+              body:
+                type: Successful
+            500:
+              body:
+                type: Error
