@@ -15,7 +15,7 @@ class SqlAlchemySession:
     def _session_maker(self):
         try:
             driver = '{}?charset=utf8'.format(self._options['url'])
-            engine = create_engine(driver, echo=True, isolation_level="READ UNCOMMITTED")
+            engine = create_engine(driver, echo=False, isolation_level="READ UNCOMMITTED")
             self._session = scoped_session(sessionmaker(bind=engine))
         except Exception as e:
             raise e

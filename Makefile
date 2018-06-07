@@ -50,7 +50,7 @@ ssh: ## Connect to container for ssh protocol
 	docker exec -it $(CONTAINER_NAME) bash
 
 log: ## Show container logs
-	docker-compose logs -f
+	docker-compose logs -f backend
 
 install-lib: ## Connect to container for ssh protocol install with pip: make install-lib
 	docker exec -it $(CONTAINER_NAME) pip-3.5 install $(LIB)

@@ -1,4 +1,4 @@
-from evaluation.application.cqrs.user_command_query import UpdateUserCommand, CreateUserCommand, FindUserQuery
+from evaluation.application.bus.user_command_query import UpdateUserCommand, CreateUserCommand, FindUserQuery
 from evaluation.domain.user import UserFactory, UserName, UserLastName
 from evaluation.domain.user_repository import UserFinderRepository, UserMngRepository
 from evaluation.domain.user_service import UserFinderService
