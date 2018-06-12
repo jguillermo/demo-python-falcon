@@ -5,7 +5,7 @@ describe('Managament User', () => {
 
     test('Insert Ok', async () => {
         let {body, statusCode} = await request('/', 'POST', {name: 'jose',last_name: 'Guillermo'});
-        expect(statusCode).toEqual(201);
+        expect(statusCode).toEqual(200);
         expect(body.data.id).toBeDefined();
         expect(body).toEqual(
             {"code": 2000,

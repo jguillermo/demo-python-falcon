@@ -1,7 +1,7 @@
-from evaluation.application.cqrs.user_command_query import CreateUserCommand, UpdateUserCommand, FindUserQuery
+from evaluation.application.bus.user_command_query import CreateUserCommand, UpdateUserCommand, FindUserQuery
 from evaluation.application.services.user_app_service import UserCreateAppService, UserUpdateAppService, \
     UserFinderdAppService
-from sdk.command_bus import Handler
+from sdk.bus import Handler
 
 
 class FindUserQueryHandler(Handler):

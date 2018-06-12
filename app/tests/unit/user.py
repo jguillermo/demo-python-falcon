@@ -1,7 +1,7 @@
 import unittest
 from unittest import mock
 
-from evaluation.application.cqrs.user_command_query import FindUserQuery, CreateUserCommand, UpdateUserCommand
+from evaluation.application.bus.user_command_query import FindUserQuery, CreateUserCommand, UpdateUserCommand
 from evaluation.application.services.user_app_service import UserFinderdAppService, UserCreateAppService, \
     UserUpdateAppService
 from evaluation.domain.user import User

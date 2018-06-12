@@ -1,60 +1,37 @@
 # -*- coding: utf-8 -*-
 import falcon
 
-from bootstrap.container import AppServicesInjector, HandlerInjector
-from evaluation.application.cqrs.user_command_query import CreateUserCommand, UpdateUserCommand, FindUserQuery
-from sdk.adapter.log.logging import ConsoleLogger
-from sdk.adapter.response.orbis import Response
+from evaluation.application.bus.user_command_query import CreateUserCommand, UpdateUserCommand, FindUserQuery
+from evaluation.application.framework.decorators.service import handler_except
+from evaluation.application.framework.handlers.base import Base
 from sdk.types import TypeUuid
 
 
-class UserHandler:
-    response = Response()
+class UserHandler(Base):
 
+    @handler_except
     def on_post(self, req: falcon.Request, resp: falcon.Response):
-        try:
-            id = TypeUuid.random().value()
-            command = CreateUserCommand(
-                id=id,
-                name=req.media.get('name', ''),
-                last_name=req.media.get('last_name', ''))
-            HandlerInjector.CreateUserCommand().handle(command)
-            resp.media = self.response.success({'id': id})
-            resp.status = falcon.HTTP_201
-        except Exception as e:
-            logger = ConsoleLogger()
-            logger.output.error('=== Handler exception ===')
-            logger.output.error(str(e), exc_info=True)
-            logger.output.error('=' * 25)
-            resp.media = self.response.error(e.__str__())
-            resp.status = falcon.HTTP_500
+        id = TypeUuid.random().value()
+        command = CreateUserCommand(
+            id=id,
+            name=req.media.get('name', ''),
+            last_name=req.media.get('last_name', ''))
+        self.command_bus.dispatch(command)
+        return {'id': id}
 
 
-class UserIdHandler:
-    response = Response()
+class UserIdHandler(Base):
 
+    @handler_except
     def on_get(self, req: falcon.Request, resp: falcon.Response, id):
-        try:
+        query = FindUserQuery(id)
+        return self.command_query.ask(query)
 
-            query = FindUserQuery(id)
-            resp.media = self.response.success(HandlerInjector.FindUserQuery().handle(query))
-            resp.status = falcon.HTTP_200
-        except Exception as e:
-            print(e.__str__())
-            resp.media = self.response.error(e.__str__())
-            resp.status = falcon.HTTP_500
-
+    @handler_except
     def on_put(self, req: falcon.Request, resp: falcon.Response, id):
-        try:
-            command = UpdateUserCommand(
-                id=id,
-                name=req.media.get('name', ''),
-                last_name=req.media.get('last_name', ''))
-
-            HandlerInjector.UpdateUserCommand().handle(command)
-            resp.media = self.response.success('ok')
-            resp.status = falcon.HTTP_200
-        except Exception as e:
-            print(e.__str__())
-            resp.media = self.response.error(e.__str__())
-            resp.status = falcon.HTTP_500
+        command = UpdateUserCommand(
+            id=id,
+            name=req.media.get('name', ''),
+            last_name=req.media.get('last_name', ''))
+        self.command_bus.dispatch(command)
+        return 'ok'

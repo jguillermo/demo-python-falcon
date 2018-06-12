@@ -2,7 +2,7 @@
 import dependency_injector.containers as containers
 import dependency_injector.providers as providers
 
-from evaluation.application.cqrs.user_handler import FindUserQueryHandler, CreateUserCommandHandler, \
+from evaluation.application.bus.user_handler import FindUserQueryHandler, CreateUserCommandHandler, \
     UpdateUserCommandHandler
 from evaluation.application.services.doc import DocumentationAppService
 from evaluation.application.services.user_app_service import UserFinderdAppService, UserCreateAppService, \
@@ -55,3 +55,4 @@ class HandlerInjector(containers.DeclarativeContainer):
     FindUserQuery = providers.Singleton(FindUserQueryHandler, service=AppServicesInjector.user_finder)
     CreateUserCommand = providers.Singleton(CreateUserCommandHandler, service=AppServicesInjector.user_create)
     UpdateUserCommand = providers.Singleton(UpdateUserCommandHandler, service=AppServicesInjector.user_update)
+
