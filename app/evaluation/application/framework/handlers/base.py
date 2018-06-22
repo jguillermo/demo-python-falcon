@@ -8,3 +8,8 @@ class Base:
     def __init__(self) -> None:
         self.command_bus = CommandBusSync()
         self.command_query = QueryBusSync()
+
+    def print(self,value):
+        print('*****************************')
+        print(value)
+        print('--*************************--')

@@ -127,3 +127,28 @@ describe('List User', () => {
         });
     });
 });
+
+describe('List Collection User', () => {
+    test('listar todos los usuarios', async () => {
+        let rng = Math.floor((Math.random() * 9999) + 1);
+        id = await add_user({
+            name: 'jose',
+            last_name: 'Inche' + rng
+        });
+        let {body, statusCode} = await request(`/?last_name=inche${rng}`);
+        expect(body).toEqual({
+            "message": "SUCCESS",
+            "code": 2000,
+            "error": false,
+            "data": [
+                {
+                    "id": id,
+                    "last_name": "Inche" + rng,
+                    "name": "jose"
+                }
+            ]
+        });
+        expect(statusCode).toEqual(200);
+    });
+});
+
