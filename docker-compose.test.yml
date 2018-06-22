@@ -18,4 +18,4 @@ services:
     depends_on:
        - mysql56
        - backend
-    command: "/tmp/wait-for-it.sh mysql56:3306 -t 50 -- npm test"
+    command: "/tmp/wait-for-it.sh mysql56:3306 -t 50 -- /app/runtest.sh"
