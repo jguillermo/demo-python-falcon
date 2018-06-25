@@ -10,7 +10,7 @@ from evaluation.application.services.user_app_service import UserFinderdAppServi
 from evaluation.infrastructure.adapter.config.file_config import FileConfig
 from evaluation.infrastructure.repository.sqlalchemy.user import UserSqlMngRepository, UserSqlFinderRepository
 from sdk.adapter.log.logging import ConsoleLogger
-from sdk.adapter.sql.sqlalchemy import SqlAlchemyAdapter, SqlAlchemySession
+from sdk.adapter.sql.sqlalchemy import SqlAlchemyAdapter, SqlAlchemySession, SqlAlchemyText
 
 
 class LoggerInjector(containers.DeclarativeContainer):
@@ -27,6 +27,7 @@ class AdapterInjector(containers.DeclarativeContainer):
     """
     sql_alchemy_session = providers.Singleton(SqlAlchemySession, config=ConfigInjector.app_config)
     sql_alchemy = providers.Factory(SqlAlchemyAdapter, sql_session=sql_alchemy_session)
+    sql_txt = providers.Factory(SqlAlchemyText, sql_session=sql_alchemy_session)  # type: SqlAlchemyText()
 
 
 class RepositoryInjector(containers.DeclarativeContainer):
@@ -55,4 +56,3 @@ class HandlerInjector(containers.DeclarativeContainer):
     FindUserQuery = providers.Singleton(FindUserQueryHandler, service=AppServicesInjector.user_finder)
     CreateUserCommand = providers.Singleton(CreateUserCommandHandler, service=AppServicesInjector.user_create)
     UpdateUserCommand = providers.Singleton(UpdateUserCommandHandler, service=AppServicesInjector.user_update)
-

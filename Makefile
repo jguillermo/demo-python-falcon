@@ -15,7 +15,7 @@ ACCOUNT_ID		?= 929226109038
 PROJECT_NAME	= $(OWNER)-$(ENV)-$(SERVICE_NAME)
 export CONTAINER_NAME 	= $(PROJECT_NAME)_backend
 export IMAGE_DEV		= $(PROJECT_NAME):dev
-export IMAGE_TEST = $(ACCOUNT_ID).dkr.ecr.eu-west-1.amazonaws.com/aptitus-dev-testrestfull-test
+export IMAGE_TEST = $(ACCOUNT_ID).dkr.ecr.eu-west-1.amazonaws.com/aptitus-dev-testrestfull-test:20180622.33
 
 include cloudformation/Makefile
 

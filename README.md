@@ -16,13 +16,6 @@ pip install awscli --upgrade --user
 make login
 ~~~~
 
-Enter your AWS account credentials
-
-~~~~
-AWS Access Key ID: EnterYourAccessKeyID
-AWS Secret Access Key: EnterYoutSecretAccessKey
-~~~~
-
 Commands:
 
 ~~~~

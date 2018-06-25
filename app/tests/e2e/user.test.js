@@ -1,16 +1,22 @@
 const request = require('@request');
 const mysql = require('@mysql');
 
+async function add_user(data) {
+    let {body, statusCode} = await request('/', 'POST', data);
+    return body.data.id
+}
+
 describe('Managament User', () => {
 
     test('Insert Ok', async () => {
-        let {body, statusCode} = await request('/', 'POST', {name: 'jose',last_name: 'Guillermo'});
+        let {body, statusCode} = await request('/', 'POST', {name: 'jose', last_name: 'Guillermo'});
         expect(statusCode).toEqual(200);
         expect(body.data.id).toBeDefined();
         expect(body).toEqual(
-            {"code": 2000,
+            {
+                "code": 2000,
                 "data": {
-                "id":body.data.id
+                    "id": body.data.id
                 },
                 "error": false,
                 "message": "SUCCESS"
@@ -21,8 +27,8 @@ describe('Managament User', () => {
         expect(results[0].last_name).toEqual('Guillermo');
     });
 
-    test('Insert Error', async () => {
-        let {body, statusCode} = await request('/', 'POST',{last_name:'Guillermo'});
+    test('Insert Error: n se pasan todos los parametros', async () => {
+        let {body, statusCode} = await request('/', 'POST', {last_name: 'Guillermo'});
         expect(statusCode).toEqual(500);
         expect(body).toEqual({
             "code": 4000,
@@ -36,20 +42,22 @@ describe('Managament User', () => {
         let {body, statusCode} = await request('/1', 'PUT', {name: 'jose'});
         expect(statusCode).toEqual(500);
         expect(body).toEqual({
-                "code": 4000,
-                "data": [],
-                "error": true,
-                "message": "No existe el usuario con id : 1"
-            });
+            "code": 4000,
+            "data": [],
+            "error": true,
+            "message": "No existe el usuario con id : 1"
+        });
     });
 
 
     test('Update Error, no se envian todos los parametros', async () => {
 
-        let {body:bodyInsert, statusCode:statusCodeInsert} = await request('/', 'POST', {name: 'jose',last_name: 'Guillermo'});
-        id = bodyInsert.data.id;
+        id = await add_user({
+            name: 'jose',
+            last_name: 'Guillermo'
+        });
 
-        let {body, statusCode} = await request(`/${id}`, 'PUT',{names: 'jose'});
+        let {body, statusCode} = await request(`/${id}`, 'PUT', {names: 'jose'});
         expect(statusCode).toEqual(500);
         expect(body).toEqual({
             "code": 4000,
@@ -61,10 +69,12 @@ describe('Managament User', () => {
     });
 
     test('Update Ok', async () => {
-        let {body:bodyInsert, statusCode:statusCodeInsert} = await request('/', 'POST', {name: 'jose',last_name: 'Guillermo'});
-        id = bodyInsert.data.id;
+        id = await add_user({
+            name: 'jose',
+            last_name: 'Guillermo'
+        });
 
-        let {body, statusCode} = await request(`/${id}`, 'PUT',{name: 'Antonio',last_name: 'Inche'});
+        let {body, statusCode} = await request(`/${id}`, 'PUT', {name: 'Antonio', last_name: 'Inche'});
 
         expect(body).toEqual({
             "code": 2000,
@@ -98,10 +108,12 @@ describe('List User', () => {
 
     test('listar un usuario existe', async () => {
 
-        let {body:bodyInsert, statusCode:statusCodeInsert} = await request('/', 'POST', {name: 'jose',last_name: 'Guillermo'});
-        id = bodyInsert.data.id;
+        id = await add_user({
+            name: 'jose',
+            last_name: 'Guillermo'
+        });
 
-        let {body, statusCode} = await request(`/${id}`,'GET');
+        let {body, statusCode} = await request(`/${id}`, 'GET');
         expect(statusCode).toEqual(200);
         expect(body).toEqual({
             "code": 2000,
@@ -115,3 +127,28 @@ describe('List User', () => {
         });
     });
 });
+
+describe('List Collection User', () => {
+    test('listar todos los usuarios', async () => {
+        let rng = Math.floor((Math.random() * 9999) + 1);
+        id = await add_user({
+            name: 'jose',
+            last_name: 'Inche' + rng
+        });
+        let {body, statusCode} = await request(`/?last_name=inche${rng}`);
+        expect(body).toEqual({
+            "message": "SUCCESS",
+            "code": 2000,
+            "error": false,
+            "data": [
+                {
+                    "id": id,
+                    "last_name": "Inche" + rng,
+                    "name": "jose"
+                }
+            ]
+        });
+        expect(statusCode).toEqual(200);
+    });
+});
+
