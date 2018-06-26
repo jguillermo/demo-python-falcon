@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import falcon
+from sqlalchemy.engine import ResultProxy
 
 from bootstrap.container import AdapterInjector
 from evaluation.application.bus.user_command_query import CreateUserCommand, UpdateUserCommand, FindUserQuery
@@ -28,16 +29,7 @@ class UserHandler(Base):
 
         # TODO: falta refactorizar
         sql = " SELECT * FROM user where last_name='{}' LIMIT 1".format(filter)
-        result = AdapterInjector.sql_txt().query(sql)
-        data = []
-        for row in result:
-            data.append({
-                "id": row[0],
-                "name": row[1],
-                "last_name": row[2],
-            })
-
-        return data
+        return AdapterInjector.sql_search().result(sql)
 
 
 class UserIdHandler(Base):

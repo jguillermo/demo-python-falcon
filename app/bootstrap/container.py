@@ -10,7 +10,7 @@ from evaluation.application.services.user_app_service import UserFinderdAppServi
 from evaluation.infrastructure.adapter.config.file_config import FileConfig
 from evaluation.infrastructure.repository.sqlalchemy.user import UserSqlMngRepository, UserSqlFinderRepository
 from sdk.adapter.log.logging import ConsoleLogger
-from sdk.adapter.sql.sqlalchemy import SqlAlchemyAdapter, SqlAlchemySession, SqlAlchemyText
+from sdk.adapter.sql.sqlalchemy import SqlAlchemyAdapter, SqlAlchemySession, SqlAlchemySearchAdapter
 
 
 class LoggerInjector(containers.DeclarativeContainer):
@@ -27,7 +27,7 @@ class AdapterInjector(containers.DeclarativeContainer):
     """
     sql_alchemy_session = providers.Singleton(SqlAlchemySession, config=ConfigInjector.app_config)
     sql_alchemy = providers.Factory(SqlAlchemyAdapter, sql_session=sql_alchemy_session)
-    sql_txt = providers.Factory(SqlAlchemyText, sql_session=sql_alchemy_session)  # type: SqlAlchemyText()
+    sql_search = providers.Factory(SqlAlchemySearchAdapter, sql_session=sql_alchemy_session)  # type: SqlAlchemySearchAdapter()
 
 
 class RepositoryInjector(containers.DeclarativeContainer):
