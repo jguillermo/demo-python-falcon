@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import create_engine, text
+from sqlalchemy.engine import ResultProxy
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.orm.session import Session
 
@@ -15,7 +16,7 @@ class SqlAlchemySession:
     def _session_maker(self):
         try:
             driver = '{}?charset=utf8'.format(self._options['url'])
-            engine = create_engine(driver, echo=False, isolation_level="READ UNCOMMITTED")
+            engine = create_engine(driver, echo=True, isolation_level="READ UNCOMMITTED")
             self._session = scoped_session(sessionmaker(bind=engine))
         except Exception as e:
             raise e
@@ -43,24 +44,23 @@ class SqlAlchemyAdapter:
         return self.__session.query(self._entity).filter_by(id=id).first()
 
 
-class SqlAlchemyText:
+class SqlAlchemySearchAdapter:
 
     def __init__(self, sql_session: SqlAlchemySession):
         self.__session = sql_session.getSession()
 
-    def query(self, sql_str: str):
-        # try:
-            sql = text(sql_str)
-            return self.__session.execute(sql)
-        # except Exception as e:
-        #     self.__session.rollback()
-        #     raise e
+    def query(self, sql_str: str) -> ResultProxy:
 
-    # def demo(self):
-        # sql = text('select name from penguins')
-        # result = db.engine.execute(sql)
-        # names = []
-        # for row in result:
-        #     names.append(row[0])
-        #
-        # print names
+        sql = text(sql_str)
+        return self.__session.execute(sql)
+
+    def result(self, sql_str: str):
+        result = self.query(sql_str)
+        print(type(result))
+        data = []
+        for row in result:
+            row_value = {}
+            for value in row.keys():
+                row_value[value] = row[value]
+            data.append(row_value)
+        return data
