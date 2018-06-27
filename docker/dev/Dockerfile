@@ -1,13 +1,23 @@
-FROM python:3.5.5-slim-jessie
+FROM python:3.5.5-alpine3.7
 
 # Install Python, tools
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python-dev \
-    git \
-    gcc \
-    libmysqlclient-dev \
-    unzip
+RUN set -ex \
+	&& apk add --no-cache --virtual .fetch-deps \
+		python-dev \
+		python-dev \
+		gcc \
+		musl-dev \
+		bash gawk sed grep bc coreutils \
+		mysql-client
+
+
+#RUN apt-get update && apt-get install -y --no-install-recommends \
+#    python-dev \
+#    git \
+#    gcc \
+#    libmysqlclient-dev \
+#    unzip
 
 # Install xray daemon
 #RUN mkdir /xray-daemon
