@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-import falcon
 import importlib
 
+import falcon
 from bootstrap import File
-from evaluation.application.framework.middlewares.xray import XRay
+from evaluation.application.framework.middlewares.cors_middleware import CORSMiddleware
+
 from .middlewares.basic import Basic
 
 
@@ -11,7 +12,8 @@ class FalconApi:
 
     def __init__(self):
         self.api = falcon.API(middleware=[
-            Basic()
+            Basic(),
+            CORSMiddleware()
         ])
         self.__load_routes()
 
