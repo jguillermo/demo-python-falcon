@@ -16,8 +16,8 @@ class UserHandler(Base):
         id = TypeUuid.random().value()
         command = CreateUserCommand(
             id=id,
-            name=req.media.get('name', ''),
-            last_name=req.media.get('last_name', ''))
+            name=req.media.get('name'),
+            last_name=req.media.get('last_name'))
 
         self.command_bus.dispatch(command)
 
