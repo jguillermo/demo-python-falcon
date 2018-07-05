@@ -18,7 +18,7 @@ class UserLastName(TypeString):
 
     def validate(self, value_name=''):
         super().validate('Apellido')
-        if self.is_required() and self._value.__len__() < 4:
+        if self.is_not_none() and self._value.__len__() < 4:
             raise Exception("El apellido debe ser mayor a 3 caracteres")
 
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import falcon
 
 from evaluation.infrastructure.bus import CommandBusSync, QueryBusSync
 
@@ -13,3 +14,7 @@ class Base:
         print('*****************************')
         print(value)
         print('--*************************--')
+
+    def handle_404(req, resp):
+        resp.status = falcon.HTTP_404
+        resp.body = 'Not found'

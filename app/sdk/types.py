@@ -13,11 +13,14 @@ class TypeBase():
 
     def validate(self, value_name=''):
         text = 'parámetro' if value_name == '' else value_name
-        if self._is_required and self._value is None:
+        if self.is_required() and self._value is None:
             raise Exception("El {} es requerido".format(text))
 
     def value(self):
         return self._value
+
+    def is_not_none(self)->bool:
+        return self._value is not None
 
 
 class TypeString(TypeBase):
@@ -27,7 +30,7 @@ class TypeString(TypeBase):
 
     def validate(self, value_name=''):
         super().validate(value_name)
-        if self.is_required() and not isinstance(self._value, str):
+        if self.is_not_none() and not isinstance(self._value, str):
             raise Exception("El tipo de dato no es un string {}".format(self._value))
 
     def value(self) -> str:
