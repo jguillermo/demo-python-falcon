@@ -13,10 +13,10 @@ describe('Load Page', () => {
         expect(statusCode).toEqual(200);
     });
 
-    test.skip('carga de la pagina Error', async () => {
-        let { body, statusCode } = await request('/xcvxcvxcv');
+    test('carga de la pagina Error', async () => {
+        let { body, statusCode } = await request('/ruta/que/no/existe');
         expect(statusCode).toEqual(404);
-        //expect(body).toEqual({ status: 404, url: '//xcvxcvxcv' });
+        // expect(body).toEqual({ status: 404, url: '//xcvxcvxcv' });
     });
 
 

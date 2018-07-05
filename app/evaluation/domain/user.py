@@ -6,21 +6,26 @@ class UserId(TypeUuid):
 
 
 class UserName(TypeString):
-    def validate(self):
-        super().validate()
-        if self._value.__len__() < 3:
+    def validate(self, value_name=''):
+        super().validate('Nombre de usuario')
+        if self.is_required() and self._value.__len__() < 3:
             raise Exception("El nombre debe ser mayor a 2 caracteres")
 
 
 class UserLastName(TypeString):
-    pass
+    def __init__(self, value: str):
+        super().__init__(value, False)
+
+    def validate(self, value_name=''):
+        super().validate('Apellido')
+        if self.is_not_none() and self._value.__len__() < 4:
+            raise Exception("El apellido debe ser mayor a 3 caracteres")
 
 
 class UserYear(TypeInteger):
-
-    def validate(self):
+    def validate(self, value_name=''):
         super().validate()
-        if self._value < 0:
+        if self.is_required() and self._value < 0:
             raise Exception("la edad tiene que ser mayor que cero")
 
 

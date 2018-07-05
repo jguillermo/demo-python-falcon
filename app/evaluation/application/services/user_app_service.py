@@ -33,13 +33,14 @@ class UserUpdateAppService:
         self.user_finder_service = UserFinderService(user_finder_repository)
 
     def update(self, id, name, last_name):
+        user = self.user_finder_service.find_by_id(id)
+
         vo_name = UserName(name)
         vo_last_name = UserLastName(last_name)
 
         vo_name.validate()
         vo_last_name.validate()
 
-        user = self.user_finder_service.find_by_id(id)
         user.name = vo_name.value()
         user.last_name = vo_last_name.value()
         self.user_mng_repository.persist(user)

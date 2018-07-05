@@ -8,7 +8,7 @@ async function add_user(data) {
 
 describe('Managament User', () => {
 
-    test('Insert Ok', async () => {
+    test('Crear usuario OK con todos los campos válidos', async () => {
         let {body, statusCode} = await request('/', 'POST', {name: 'jose', last_name: 'Guillermo'});
         expect(statusCode).toEqual(200);
         expect(body.data.id).toBeDefined();
@@ -27,19 +27,49 @@ describe('Managament User', () => {
         expect(results[0].last_name).toEqual('Guillermo');
     });
 
-    test('Insert Error: n se pasan todos los parametros', async () => {
+    test('Crear usuario OK sin el last_name: parametro no requerido', async () => {
+        let {body, statusCode} = await request('/', 'POST', {name: 'jose'});
+        expect(statusCode).toEqual(200);
+        expect(body.data.id).toBeDefined();
+        expect(body).toEqual(
+            {
+                "code": 2000,
+                "data": {
+                    "id": body.data.id
+                },
+                "error": false,
+                "message": "SUCCESS"
+            });
+
+        let results = await mysql(`SELECT name, last_name FROM user WHERE id = "${body.data.id}"`);
+        expect(results[0].name).toEqual('jose');
+        expect(results[0].last_name).toEqual(null);
+    });
+
+    test('Crear Error: no se pasa el parametro requerido: nombre de usuario', async () => {
         let {body, statusCode} = await request('/', 'POST', {last_name: 'Guillermo'});
         expect(statusCode).toEqual(500);
         expect(body).toEqual({
             "code": 4000,
             "data": [],
             "error": true,
-            "message": "El nombre debe ser mayor a 2 caracteres"
+            "message": "El Nombre de usuario es requerido"
         });
     });
 
-    test('Update Error no existe le usuario', async () => {
-        let {body, statusCode} = await request('/1', 'PUT', {name: 'jose'});
+    test('Crear usuario ERROR el apellido tiene pocos caracteres', async () => {
+        let {body, statusCode} = await request('/', 'POST', {name: 'jose', last_name: 'Gu'});
+        expect(body).toEqual({
+            "code": 4000,
+            "data": [],
+            "error": true,
+            "message": "El apellido debe ser mayor a 3 caracteres"
+        });
+        expect(statusCode).toEqual(500);
+    });
+
+    test('Actualizar Error no existe le usuario', async () => {
+        let {body, statusCode} = await request('/1', 'PUT', {name: 'jose',last_name: 'Guillermo'});
         expect(statusCode).toEqual(500);
         expect(body).toEqual({
             "code": 4000,
@@ -50,7 +80,7 @@ describe('Managament User', () => {
     });
 
 
-    test('Update Error, no se envian todos los parametros', async () => {
+    test('Actualizar Error, no se envian todos los parametros', async () => {
 
         id = await add_user({
             name: 'jose',
@@ -64,11 +94,11 @@ describe('Managament User', () => {
             "data": [],
             "error": true,
             "message":
-                "El nombre debe ser mayor a 2 caracteres"
+                "El Nombre de usuario es requerido"
         });
     });
 
-    test('Update Ok', async () => {
+    test('Update Ok con todos los campos', async () => {
         id = await add_user({
             name: 'jose',
             last_name: 'Guillermo'
