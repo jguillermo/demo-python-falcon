@@ -33,8 +33,8 @@ Session = scoped_session(session_factory)
 class SqlAlchemyAdapter:
     _entity = None
 
-    def __init__(self, sql_session: Session):
-        self.__session = sql_session()
+    def __init__(self):
+        self.__session = Session()
 
     def persist(self, entity):
         try:
@@ -51,8 +51,8 @@ class SqlAlchemyAdapter:
 
 class SqlAlchemySearchAdapter:
 
-    def __init__(self, sql_session: Session):
-        self.__session = sql_session()
+    def __init__(self):
+        self.__session = Session()
 
     def query(self, sql_str: str) -> ResultProxy:
 
